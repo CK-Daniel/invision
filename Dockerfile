@@ -45,16 +45,18 @@ RUN pip install poetry && \
 # Production stage
 FROM nginx:alpine
 
-# Install Python and dependencies
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install flask python-dotenv requests colorama beautifulsoup4 unidecode
+# Install Python and set up virtual environment
+RUN apk add --no-cache python3 py3-pip python3-dev && \
+    python3 -m venv /venv && \
+    /venv/bin/pip install flask python-dotenv requests colorama beautifulsoup4 unidecode
+
+ENV PATH="/venv/bin:$PATH"
 
 # Copy the frontend build files to Nginx
 COPY --from=frontend-build /frontend/dist /usr/share/nginx/html
 
-# Copy the backend files and dependencies
+# Copy the backend files
 COPY --from=backend-build /backend /backend
-COPY --from=backend-build /usr/local/lib/python3.12/site-packages /usr/lib/python3.12/site-packages
 
 # Copy custom Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
@@ -62,7 +64,7 @@ COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # Create start script
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'cd /backend && FLASK_APP=src/app.py python3 -m flask run --host=0.0.0.0 --port=8080 &' >> /docker-entrypoint.sh && \
+    echo 'cd /backend && FLASK_APP=src/app.py /venv/bin/python -m flask run --host=0.0.0.0 --port=8080 &' >> /docker-entrypoint.sh && \
     echo 'export PORT=${PORT:-8080}' >> /docker-entrypoint.sh && \
     echo 'envsubst "\$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
