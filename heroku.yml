@@ -4,5 +4,5 @@ build:
     worker: backend/Dockerfile
 
 run:
-  web: nginx -g 'daemon off;'
+  web: /docker-entrypoint.sh
   worker: python src/app.py
