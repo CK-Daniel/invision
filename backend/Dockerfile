@@ -45,12 +45,9 @@ ENV FLASK_APP=/backend/src/app
 ENV FLASK_ENV=production
 
 # Create start script
-COPY <<-"EOF" /start.sh
-#!/bin/sh
-python src/app.py
-EOF
-
-RUN chmod +x /start.sh
+RUN echo '#!/bin/sh' > /start.sh && \
+    echo 'cd /backend && python src/app.py' >> /start.sh && \
+    chmod +x /start.sh
 
 # Run Flask backend
 CMD ["/start.sh"]
