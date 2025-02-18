@@ -45,8 +45,9 @@ RUN pip install poetry && \
 # Production stage
 FROM nginx:alpine
 
-# Install Python
-RUN apk add --no-cache python3 py3-pip
+# Install Python and dependencies
+RUN apk add --no-cache python3 py3-pip && \
+    pip3 install flask python-dotenv requests colorama beautifulsoup4 unidecode
 
 # Copy the frontend build files to Nginx
 COPY --from=frontend-build /frontend/dist /usr/share/nginx/html
@@ -61,7 +62,7 @@ COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # Create start script
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'cd /backend && python3 src/app.py &' >> /docker-entrypoint.sh && \
+    echo 'cd /backend && FLASK_APP=src/app.py python3 -m flask run --host=0.0.0.0 --port=8080 &' >> /docker-entrypoint.sh && \
     echo 'export PORT=${PORT:-8080}' >> /docker-entrypoint.sh && \
     echo 'envsubst "\$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
