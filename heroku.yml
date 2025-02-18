@@ -1,13 +1,8 @@
-setup:
-  addons:
-    - plan: heroku-postgresql:hobby-dev
-      as: DATABASE
-
 build:
   docker:
     web: frontend/Dockerfile.prod
-    backend: backend/Dockerfile
+    worker: backend/Dockerfile
 
 run:
   web: nginx -g 'daemon off;'
-  backend: python src/app.py
+  worker: python src/app.py
