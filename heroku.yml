@@ -1,6 +1,6 @@
 build:
   docker:
-    web: frontend/Dockerfile.prod
+    web: Dockerfile
 
 run:
-  web: (cd /backend && python src/app.py) & /docker-entrypoint.sh
+  web: /docker-entrypoint.sh
