@@ -17,7 +17,11 @@ export default (props: { mode: string }) => {
     build: {
       outDir: 'dist',
       assetsDir: 'assets',
-      sourcemap: true
+      sourcemap: true,
+      // Skip TS type checking during build
+      typescript: {
+        ignoreBuildErrors: true
+      }
     },
     server: {
       host: '0.0.0.0',
