@@ -64,7 +64,7 @@ COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # Create start script
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
-    echo 'cd /backend && FLASK_APP=src/app.py /venv/bin/python -m flask run --host=0.0.0.0 --port=8080 &' >> /docker-entrypoint.sh && \
+    echo 'cd /backend && FLASK_APP=src/app.py DOCS_ROOT=/backend/static/docs /venv/bin/python -m flask run --host=0.0.0.0 --port=8080 &' >> /docker-entrypoint.sh && \
     echo 'export PORT=${PORT:-8080}' >> /docker-entrypoint.sh && \
     echo 'envsubst "\$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
