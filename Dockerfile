@@ -55,8 +55,9 @@ ENV PATH="/venv/bin:$PATH"
 # Copy the frontend build files to Nginx
 COPY --from=frontend-build /frontend/dist /usr/share/nginx/html
 
-# Copy the backend files
+# Copy the backend files and static content
 COPY --from=backend-build /backend /backend
+COPY backend/static /backend/static
 
 # Copy custom Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf

@@ -1,0 +1,21 @@
+{
+  "data": {
+    "id": 1,
+    "name": "Sample Project",
+    "type": "prototype",
+    "updatedAt": "2025-02-18T14:00:00Z",
+    "isArchived": false,
+    "tags": [
+      {
+        "id": 1,
+        "name": "Design System",
+        "color": "#FF5733"
+      },
+      {
+        "id": 2,
+        "name": "Mobile",
+        "color": "#33FF57"
+      }
+    ]
+  }
+}

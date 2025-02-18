@@ -7,7 +7,7 @@ from src import routes
 
 load_dotenv()
 
-docs_root = os.getenv("DOCS_ROOT", "static")
+static_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
 
 # Setup the CA if needed
 if os.getenv("CUSTOM_CA_FILE"):
@@ -17,7 +17,7 @@ if os.getenv("CUSTOM_CA_FILE"):
         os.environ["CURL_CA_BUNDLE"] = str(ca_file)
         os.environ["REQUESTS_CA_BUNDLE"] = str(ca_file)
 
-app = Flask(__name__, static_url_path="/static", static_folder=docs_root)
+app = Flask(__name__, static_url_path="/static", static_folder=static_folder)
 
 app.register_blueprint(routes.screens)
 app.register_blueprint(routes.projects)

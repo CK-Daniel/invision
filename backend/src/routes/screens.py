@@ -6,7 +6,7 @@ from flask import Blueprint, jsonify, current_app, send_file
 blueprint = Blueprint("screens", __name__)
 
 
-@blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>")
+@blueprint.route("/api/projects/<int:project_id>/screens/<int:screen_id>")
 def get_screen(project_id, screen_id):
     screen_dir = (
         Path(current_app.static_folder)
@@ -35,7 +35,7 @@ def get_screen(project_id, screen_id):
         return f"Error fetching screen: {e}", 500
 
 
-@blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>/preview")
+@blueprint.route("/api/projects/<int:project_id>/screens/<int:screen_id>/preview")
 def get_screen_preview(project_id, screen_id):
     screen_dir = (
         Path(current_app.static_folder)
@@ -61,7 +61,7 @@ def get_screen_preview(project_id, screen_id):
         return f"Error fetching preview: {e}", 500
 
 
-@blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>/inspect")
+@blueprint.route("/api/projects/<int:project_id>/screens/<int:screen_id>/inspect")
 def get_screen_inspect(project_id, screen_id):
     screen_dir = (
         Path(current_app.static_folder)
@@ -90,7 +90,7 @@ def get_screen_inspect(project_id, screen_id):
         return f"Error fetching inspect data: {e}", 500
 
 
-@blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>/history")
+@blueprint.route("/api/projects/<int:project_id>/screens/<int:screen_id>/history")
 def get_screen_history(project_id, screen_id):
     screen_dir = (
         Path(current_app.static_folder)

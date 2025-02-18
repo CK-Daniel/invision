@@ -1,0 +1,19 @@
+{
+  "tags": [
+    {
+      "id": 1,
+      "name": "Design System",
+      "color": "#FF5733"
+    },
+    {
+      "id": 2,
+      "name": "Mobile",
+      "color": "#33FF57"
+    },
+    {
+      "id": 3,
+      "name": "Web",
+      "color": "#3357FF"
+    }
+  ]
+}
