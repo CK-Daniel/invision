@@ -37,13 +37,20 @@ RUN if [ -n "$PYTHON_REGISTY_URL" ]; then \
     fi
 
 # Install dependencies (without dev dependencies)
-RUN poetry install --only main --no-interaction --no-ansi
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-interaction --no-ansi
 
 # Flask app target
 ENV FLASK_APP=/backend/src/app
+ENV FLASK_ENV=production
 
-# Expose the Flask port (disabled since we have a /api proxy on the frontend app)
-# EXPOSE 8080
+# Create start script
+COPY <<-"EOF" /start.sh
+#!/bin/sh
+python src/app.py
+EOF
+
+RUN chmod +x /start.sh
 
 # Run Flask backend
-CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=8080"]
+CMD ["/start.sh"]
