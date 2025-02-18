@@ -19,8 +19,8 @@ if os.getenv("CUSTOM_CA_FILE"):
 
 app = Flask(__name__, static_url_path="/static", static_folder=docs_root)
 
-app.register_blueprint(routes.screens)
-app.register_blueprint(routes.projects)
-app.register_blueprint(routes.tags)
-app.register_blueprint(routes.scrape)
-app.register_blueprint(routes.shares)
+app.register_blueprint(routes.screens, url_prefix='/api')
+app.register_blueprint(routes.projects, url_prefix='/api')
+app.register_blueprint(routes.tags, url_prefix='/api')
+app.register_blueprint(routes.scrape, url_prefix='/api')
+app.register_blueprint(routes.shares, url_prefix='/api')
