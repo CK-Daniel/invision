@@ -32,11 +32,28 @@ RUN if [ -n "$NPM_REGISTRY_SERVER" ]; then \
 RUN yarn install --non-interactive --production
 RUN yarn build
 
+# Backend build stage
+FROM python:3.12.6-slim AS backend
+
+WORKDIR /backend
+COPY ../backend .
+
+RUN pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --only main --no-interaction --no-ansi
+
 # Production stage
 FROM nginx:alpine
 
-# Copy the build files to Nginx
+# Install Python
+RUN apk add --no-cache python3 py3-pip
+
+# Copy the frontend build files to Nginx
 COPY --from=build /frontend/dist /usr/share/nginx/html
+
+# Copy the backend files and dependencies
+COPY --from=backend /backend /backend
+COPY --from=backend /usr/local/lib/python3.12/site-packages /usr/lib/python3.12/site-packages
 
 # Copy custom Nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
@@ -44,6 +61,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # Create start script
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'cd /backend && python3 src/app.py &' >> /docker-entrypoint.sh && \
     echo 'envsubst "$PORT" < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf' >> /docker-entrypoint.sh && \
     echo 'nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh
@@ -51,5 +69,5 @@ RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx with environment variable substitution
+# Start both services
 CMD ["/docker-entrypoint.sh"]
