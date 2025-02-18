@@ -14,43 +14,39 @@ export default (props: { mode: string }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: true
+    },
     server: {
       host: '0.0.0.0',
       port: 3000,
       proxy: {
         '/api': {
-          target: JSON.parse(process.env.VITE_IN_DOCKER_CONTAINER || 'false')
-            ? 'http://backend:8080'
-            : 'http://localhost:8080',
+          target: 'http://backend:8080',
           changeOrigin: true,
           secure: false,
-          ws: true,
-          rewrite: path => path.replace(/^\/api/, ''),
-          configure: proxy => {
-            proxy.on('error', err => {
-              console.log('proxy error', err);
-            });
-            proxy.on('proxyReq', (_proxyReq, req) => {
-              console.log(
-                'Sending Request to the Target:',
-                req.method,
-                req.url,
-              );
-            });
-            proxy.on('proxyRes', (proxyRes, req) => {
-              console.log(
-                'Received Response from the Target:',
-                proxyRes.statusCode,
-                req.url,
-              );
-            });
-          },
+          rewrite: (path) => path.replace(/^\/api/, ''),
+          timeout: 60000,
+          proxyTimeout: 60000
         },
-      },
-      watch: {
-        usePolling: true,
-      },
-      hmr: { host: '0.0.0.0' },
-    },
+        '/static': {
+          target: 'http://backend:8080',
+          changeOrigin: true,
+          secure: false
+        },
+        '/projects': {
+          target: 'http://backend:8080',
+          changeOrigin: true,
+          secure: false,
+          bypass: (req) => {
+            if (req.headers.accept?.includes('text/html')) {
+              return '/index.html';
+            }
+          }
+        }
+      }
+    }
   });
 };

@@ -17,7 +17,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useFavorites } from '@/hooks/useFavorites';
 
 import { Project as ProjectType } from '@/types';
-import { getStaticUrl } from '@/utils';
+import { cn, getStaticUrl } from '@/utils';
 
 interface ProjectCardProps {
   project: ProjectType;
@@ -49,7 +49,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           </Link>
 
           <div className="absolute flex flex-col bottom-2 left-2 gap-1">
-            {project.data.tags.map(tag => (
+            {project.data.tags?.map(tag => (
               <Link
                 key={tag.id}
                 to={`/projects?tag=${tag.id}`}

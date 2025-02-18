@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
 import defaultValues from '@/constants/defaultValues';
 import { ProjectCard } from '@/components/ProjectCard';
+import { LoadingGrid } from '@/components/LoadingGrid';
 import {
   Pagination,
   PaginationContent,
@@ -135,7 +136,9 @@ function ProjectsTab() {
   return (
     <div className="flex h-full w-full flex-col gap-6 relative">
       {/* Projects */}
-      {projects && projects.data.length > 0 ? (
+      {isFetching ? (
+        <LoadingGrid />
+      ) : projects && projects.data.length > 0 ? (
         <div
           dir="ltr"
           data-orientation="horizontal"
@@ -146,20 +149,18 @@ function ProjectsTab() {
           ))}
         </div>
       ) : (
-        !isFetching && (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-            <EmptyState />
-            <h2 className="text-2xl font-semibold tracking-tight">
-              There is nothing here?
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Huh? I thought I left that here... strange.
-            </p>
-            <Button className="mt-4" onClick={() => refetch()}>
-              Give it another shot
-            </Button>
-          </div>
-        )
+        <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+          <EmptyState />
+          <h2 className="text-2xl font-semibold tracking-tight">
+            There is nothing here?
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Huh? I thought I left that here... strange.
+          </p>
+          <Button className="mt-4" onClick={() => refetch()}>
+            Give it another shot
+          </Button>
+        </div>
       )}
 
       {/* Pagination */}

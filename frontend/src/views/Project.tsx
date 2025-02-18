@@ -110,7 +110,7 @@ function Project() {
   );
 
   const expandedGroups = useMemo(() => {
-    return project?.screens.groups.reduce((acc, group) => {
+    return project?.screens?.groups?.reduce((acc, group) => {
       if (!collapsedGroups.has(group.dividerID)) {
         acc.push(group.dividerID.toString());
       }
@@ -173,7 +173,7 @@ function Project() {
               </div>
 
               <div className="flex h-auto top-2 left-2 gap-1">
-                {project.data.tags.map(tag => (
+                {project.data.tags?.map(tag => (
                   <Link
                     key={tag.id}
                     to={`/projects?tag=${tag.id}`}
@@ -272,7 +272,7 @@ function Project() {
             }}
           >
             {/* Toolbar (tabs, search, filters) */}
-            {project.screens.archivedScreensCount > 0 && (
+            {project.screens?.archivedScreensCount > 0 && (
               <div className="flex justify-between gap-4">
                 {/* Left Part */}
                 <div className="flex gap-4 items-center">

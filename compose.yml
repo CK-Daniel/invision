@@ -35,5 +35,6 @@ services:
       NODE_ENV: development
       CUSTOM_CA_FILE: ${CUSTOM_CA_FILE}
     volumes:
-      - ${ROOT:-.}/frontend/src:/frontend/src # Hot reloading
-    command: yarn dev
+      - ${ROOT:-.}/frontend:/frontend # Mount entire frontend directory
+      - /frontend/node_modules # Preserve container node_modules
+    command: yarn dev --host

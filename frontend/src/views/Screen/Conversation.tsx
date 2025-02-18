@@ -32,7 +32,7 @@ import dayjs from 'dayjs';
 import { Card } from '@/components/ui/card';
 import { IntermediateRepresentation } from 'linkifyjs';
 import style from './Conversation.module.scss';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import 'linkify-plugin-mention';

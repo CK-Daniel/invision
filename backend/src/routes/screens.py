@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, jsonify, current_app, send_file
 
 blueprint = Blueprint("screens", __name__)
 
@@ -33,6 +33,32 @@ def get_screen(project_id, screen_id):
         return "Screen not found", 404
     except Exception as e:
         return f"Error fetching screen: {e}", 500
+
+
+@blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>/preview")
+def get_screen_preview(project_id, screen_id):
+    screen_dir = (
+        Path(current_app.static_folder)
+        / "projects"
+        / str(project_id)
+        / "screens"
+        / str(screen_id)
+    )
+
+    image_path = screen_dir / "image.png"
+
+    try:
+        if image_path.exists():
+            return send_file(image_path, mimetype='image/png')
+        else:
+            return (
+                "Preview not found",
+                404,
+            )
+    except FileNotFoundError:
+        return "Preview not found", 404
+    except Exception as e:
+        return f"Error fetching preview: {e}", 500
 
 
 @blueprint.route("/projects/<int:project_id>/screens/<int:screen_id>/inspect")

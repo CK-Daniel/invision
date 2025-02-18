@@ -1,13 +1,9 @@
-ARG NODE_VERSION=22.10.0
-FROM node:${NODE_VERSION}
-
-# Use production node environment by default.
-ENV NODE_ENV=development
+FROM node:22.10.0
 
 WORKDIR /frontend
 
-# Copy the source files into the image.
-COPY . .
+# Copy package files first for better caching
+COPY package.json yarn.lock ./
 
 # Define build-time arguments
 ARG NPM_REGISTRY_SERVER
@@ -22,7 +18,6 @@ RUN if [ -n "$CUSTOM_CA_FILE" ]; then \
         export NODE_EXTRA_CA_CERTS="/usr/local/share/ca-certificates/${CUSTOM_CA_FILE}"; \
     fi
 
-
 # Set custom Yarn registry if NPM_REGISTRY_SERVER is defined
 RUN if [ -n "$NPM_REGISTRY_SERVER" ]; then \
         yarn config set registry "$NPM_REGISTRY_SERVER" --global; \
@@ -30,13 +25,16 @@ RUN if [ -n "$NPM_REGISTRY_SERVER" ]; then \
     fi
 
 # Install dependencies
-RUN yarn install --non-interactive
+RUN yarn install
 
-# Expose the port that the application listens on.
-EXPOSE 3000
+# Copy the rest of the application
+COPY . .
 
 # Special env to configure the proxy
 ENV VITE_IN_DOCKER_CONTAINER true
 
-# Run the application.
-CMD ["yarn", "dev"]
+# Expose the port that the application listens on
+EXPOSE 3000
+
+# Start development server
+CMD ["yarn", "dev", "--host"]
