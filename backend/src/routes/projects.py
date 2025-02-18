@@ -9,7 +9,7 @@ from flask import Blueprint, jsonify, current_app, request
 blueprint = Blueprint("projects", __name__)
 
 
-@blueprint.route("/projects")
+@blueprint.route("/api/projects")
 def fetch_projects():
     # Get pagination parameters
     limit = int(request.args.get("limit", 40))
@@ -118,7 +118,7 @@ def fetch_projects():
         return f"Error fetching projects: {e}", 500
 
 
-@blueprint.route("/projects/<int:project_id>")
+@blueprint.route("/api/projects/<int:project_id>")
 def get_project(project_id):
     # Get search query if provided
     search_query = request.args.get("search", "")

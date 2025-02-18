@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, current_app
 blueprint = Blueprint("tags", __name__)
 
 
-@blueprint.route("/tags")
+@blueprint.route("/api/tags")
 def fetch_tags():
     try:
         tags_json_path = Path(current_app.static_folder) / "common" / "tags.json"
