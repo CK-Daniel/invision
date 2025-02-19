@@ -37,11 +37,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             to={`/projects/${project.id}`}
             className="flex h-full w-full items-center justify-center text-slate-500"
           >
-            {project.data.thumbnailUrl ? (
+            {(project.data?.thumbnailUrl || project.thumbnailUrl) ? (
               <img
                 className="absolute inset-0 h-auto w-full object-cover transition-all hover:scale-105"
-                src={getStaticUrl(project.data.thumbnailUrl)}
-                alt={project.data.name}
+                src={getStaticUrl(project.data?.thumbnailUrl || project.thumbnailUrl)}
+                alt={project.data?.name || project.name}
               />
             ) : (
               <ImageOffIcon className="h-8 w-8" />
@@ -49,7 +49,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           </Link>
 
           <div className="absolute flex flex-col bottom-2 left-2 gap-1">
-            {project.data.tags?.map(tag => (
+            {(project.data?.tags || project.tags)?.map(tag => (
               <Link
                 key={tag.id}
                 to={`/projects?tag=${tag.id}`}
@@ -77,20 +77,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <div className="flex flex-col gap-1 overflow-hidden">
           <Link to={`/projects/${project.id}`}>
             <CardTitle className="flex items-center gap-1 text-sm">
-              {project.data.isArchived && (
+              {(project.data?.isArchived || project.isArchived) && (
                 <Archive aria-label="Archived" className="shrink-0 size-4" />
               )}
 
               <span className="text-ellipsis overflow-hidden break-words line-clamp-2">
-                {project.data.name}
+                {project.data?.name || project.name}
               </span>
             </CardTitle>
           </Link>
 
-          <CardDescription>{project.data.itemCount} screens</CardDescription>
+          <CardDescription>{project.data?.itemCount || project.itemCount || 0} screens</CardDescription>
 
-          <CardDescription title={dayjs(project.data.updatedAt).format('L LT')}>
-            {dayjs(project.data.updatedAt).fromNow()}
+          <CardDescription title={dayjs(project.data?.updatedAt || project.updatedAt).format('L LT')}>
+            {dayjs(project.data?.updatedAt || project.updatedAt).fromNow()}
           </CardDescription>
         </div>
 
