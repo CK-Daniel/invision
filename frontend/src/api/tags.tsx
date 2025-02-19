@@ -9,8 +9,8 @@ export function fetchTags(): Promise<Tag[]> {
 
       return response.json();
     })
-    .then(projects => {
-      return projects;
+    .then(response => {
+      return response.data;
     })
     .catch(error => {
       throw error;
