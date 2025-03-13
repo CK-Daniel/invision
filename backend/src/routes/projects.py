@@ -102,12 +102,9 @@ def fetch_projects():
         # Calculate previous page number
         previous_page = page - 1 if start_index > 0 else total_pages
 
-        # Extract just the data from each project
-        project_data = [p["data"] for p in paginated_projects]
-        
         return jsonify(
             {
-                "data": project_data,
+                "data": paginated_projects,
                 "total": total_projects,
                 "page": page,
                 "limit": limit,

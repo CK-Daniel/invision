@@ -36,7 +36,8 @@ RUN yarn build
 FROM python:3.12.6-slim AS backend
 
 WORKDIR /backend
-COPY ../backend .
+COPY backend/pyproject.toml backend/poetry.lock ./
+COPY backend/src ./src
 
 RUN pip install poetry && \
     poetry config virtualenvs.create false && \
